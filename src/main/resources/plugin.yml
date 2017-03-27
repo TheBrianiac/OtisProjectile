@@ -1,0 +1,9 @@
+name: OtisProjectile
+main: me.otisdiver.otisprojectile.OtisProjectile
+version: 0.1.0
+author: Brian Schultz
+#commands:
+#    name:
+#        description: Description appears in /help
+#        permission: Perm - shows red "Contact admin if mistake" message if false.
+#        usage: Shown when command is improperly run.
