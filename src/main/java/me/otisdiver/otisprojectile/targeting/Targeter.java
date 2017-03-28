@@ -16,7 +16,7 @@ public abstract class Targeter {
     protected Projectile projectile = null;
     
     // Currently running targeting task ID.
-    private int targetingTask = 0;
+    protected int targetingTask = 0;
     
     public Targeter(OtisProjectile main, Projectile projectile) {
         this.main = main;
