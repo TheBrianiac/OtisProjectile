@@ -2,6 +2,7 @@ package me.otisdiver.otisprojectile.targeting;
 
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Projectile;
 
@@ -52,9 +53,12 @@ public class EggTargeter extends Targeter {
             if (!identifyTarget()) return;
         }
         
+        Location projectileLocation = projectile.getLocation();
+        Location targetLocation = target.getLocation();
+        
         // Continue chasing the target if it's still within the search range.
-        if (Utils.calculateDistance(projectile.getLocation(), target.getLocation()) < searchRange) {
-            projectile.setVelocity(target.getLocation().toVector());
+        if (Utils.calculateDistance(projectileLocation, targetLocation) < searchRange) {
+            projectile.setVelocity(Utils.getLocationsVectorDifference(projectileLocation, targetLocation));
             lastUpdateFailed = false;
         }
         // If the attempt fails, and the last attempt also failed, give up (will find new target on next tick).
