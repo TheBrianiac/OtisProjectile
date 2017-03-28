@@ -44,7 +44,6 @@ public class ArrowTargeter extends Targeter {
         // Find the nearest entity from that list, save it.
         Entity e = Utils.getNearestEntityInList(projectileLocation, nearbyEntities);
         if (e == null) return;
-        previousTarget = e;
         
         // Adjust velocity.
         projectile.setVelocity(projectile.getVelocity().multiply(0));
@@ -54,8 +53,6 @@ public class ArrowTargeter extends Targeter {
     @Override
     public boolean cancelTargetingTask() {
         if (!isTargetingTaskRunning()) return false;
-        
-        previousTarget.setGlowing(false);
         
         Bukkit.getScheduler().cancelTask(targetingTask);
         targetingTask = 0;
