@@ -1,5 +1,6 @@
 package me.otisdiver.otisprojectile.targeting;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -24,10 +25,13 @@ public class EggTargeter extends Targeter {
     private boolean identifyTarget() {
         // Get a list of all entities within the search range.
         List<Entity> nearbyEntities = Utils.getNearbyEntitiesList(projectile, searchRange);
+        
         // Remove from the list any entities that aren't hostile mobs.
-        for(Entity e : nearbyEntities) {
-            if (!Utils.isEntityHostile(e)) nearbyEntities.remove(e);
-            if (projectile.getShooter().equals(e)) nearbyEntities.remove(e);
+        Iterator<Entity> it = nearbyEntities.iterator();
+        while (it.hasNext()) {
+            Entity e = it.next();
+
+            if (!Utils.isEntityHostile(e) || projectile.getShooter().equals(e)) it.remove();
         }
         
         // Find the nearest entity. If it exists, update the target and report success.
