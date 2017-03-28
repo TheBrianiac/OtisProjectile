@@ -28,6 +28,7 @@ public abstract class Targeter {
      * @return true, if the entity is gone
      */
     protected boolean isProjectileGone() {
+        if (projectile == null) return true;
         return (projectile.isDead() && !projectile.isValid());
     }
     
