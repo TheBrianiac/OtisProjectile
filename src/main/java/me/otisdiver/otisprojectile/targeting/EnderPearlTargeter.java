@@ -2,8 +2,10 @@ package me.otisdiver.otisprojectile.targeting;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Set;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -31,7 +33,13 @@ public class EnderPearlTargeter extends Targeter {
         }
         
         if (target == null) return;
-        projectile.setVelocity(target.getLocation().toVector());
+        
+        Location projectileLocation = projectile.getLocation();
+        Location targetLocation = target.getLocation();
+        
+        if (Utils.calculateDistance(projectileLocation, targetLocation) > 4) {
+            projectile.setVelocity(Utils.getLocationsVectorDifference(projectileLocation, targetLocation));
+        }
     }
 
     @Override
@@ -45,9 +53,18 @@ public class EnderPearlTargeter extends Targeter {
         // TODO: better solution via NMS
         Block targetBlock = player.getTargetBlock((Set<Material>) null, 64);
         ArrayList<Entity> entities = new ArrayList<Entity>(Arrays.asList(targetBlock.getChunk().getEntities()));
+        /// Exclude the player
+        Iterator<Entity> it = entities.iterator();
+        while (it.hasNext()) {
+            Entity e = it.next();
+            if (player.equals(e)) it.remove();
+        }
         target = Utils.getNearestEntityInList(targetBlock.getLocation(), entities);
         
-        // Start targeting, report success of this task.
+        // Make the player follow the pearl.
+        projectile.setPassenger(player);
+        
+        // Start (actual) targeting, report success of this task.
         return super.beginTargeting();
     }
 
