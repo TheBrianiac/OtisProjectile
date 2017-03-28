@@ -25,10 +25,9 @@ public class EggTargeter extends Targeter {
         // Get a list of all entities within the search range.
         List<Entity> nearbyEntities = Utils.getNearbyEntitiesList(projectile, searchRange);
         // Remove from the list any entities that aren't hostile mobs.
-        for(int i = 0; i < nearbyEntities.size(); i++) {
-            Entity e = nearbyEntities.get(i);
-            if (!Utils.isEntityHostile(e)) nearbyEntities.remove(i);
-            if (projectile.getShooter().equals(e)) nearbyEntities.remove(i);
+        for(Entity e : nearbyEntities) {
+            if (!Utils.isEntityHostile(e)) nearbyEntities.remove(e);
+            if (projectile.getShooter().equals(e)) nearbyEntities.remove(e);
         }
         
         // Find the nearest entity. If it exists, update the target and report success.
