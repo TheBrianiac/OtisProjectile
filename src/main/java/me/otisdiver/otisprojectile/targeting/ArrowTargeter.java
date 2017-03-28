@@ -3,9 +3,11 @@ package me.otisdiver.otisprojectile.targeting;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
+import org.bukkit.util.Vector;
 
 import me.otisdiver.otisprojectile.OtisProjectile;
 import me.otisdiver.otisprojectile.Utils;
@@ -28,6 +30,8 @@ public class ArrowTargeter extends Targeter {
             return;
         }
         
+        Location projectileLocation = projectile.getLocation();
+        
         // Get a list of all entities within the search range.
         List<Entity> nearbyEntities = Utils.getNearbyEntitiesList(projectile, searchRange);
         // Remove from the list any entities that aren't living entities (players/mobs).
@@ -37,10 +41,25 @@ public class ArrowTargeter extends Targeter {
             if (projectile.getShooter().equals(e)) nearbyEntities.remove(i);
         }
         
-        // Find the nearest entity from that list.
-        Entity e = Utils.getNearestEntityInList(projectile.getLocation(), nearbyEntities);
+        // Find the nearest entity from that list, save it.
+        Entity e = Utils.getNearestEntityInList(projectileLocation, nearbyEntities);
         if (e == null) return;
-        projectile.setVelocity(e.getLocation().toVector());
+        previousTarget = e;
+        
+        // Adjust velocity.
+        projectile.setVelocity(projectile.getVelocity().multiply(0));
+        projectile.setVelocity(e.getLocation().toVector().subtract(projectileLocation.toVector()));
+    }
+    
+    @Override
+    public boolean cancelTargetingTask() {
+        if (!isTargetingTaskRunning()) return false;
+        
+        previousTarget.setGlowing(false);
+        
+        Bukkit.getScheduler().cancelTask(targetingTask);
+        targetingTask = 0;
+        return true;
     }
     
     @Override
