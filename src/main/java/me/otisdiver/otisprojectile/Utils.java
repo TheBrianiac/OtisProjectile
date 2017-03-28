@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.util.Vector;
 
 public class Utils {
     
@@ -25,6 +26,12 @@ public class Utils {
         return Math.sqrt(dx * dx + dy * dy + dz * dz);
     }
     
+    /** Finds all entities within a cube search area centered on the entity.
+     * 
+     * @param alpha the entity to search around
+     * @param searchRange the width of the search cube
+     * @return a list of entities nearby the original entity
+     */
     public static List<Entity> getNearbyEntitiesList(Entity alpha, int searchRange) {
         // Find all entities within a cube area the width of the search range that's centered on the entity.
         double radius = searchRange / 2;
@@ -56,6 +63,16 @@ public class Utils {
         }
         
         return closestEntity;
+    }
+    
+    /** Find the vector difference between two locations.
+     * 
+     * @param alpha the current location
+     * @param beta the location to adjust to
+     * @return a vector that can be applied to an entity at point alpha to make it change direction to beta
+     */
+    public static Vector getLocationsVectorDifference(Location alpha, Location beta) {
+        return beta.toVector().subtract(alpha.toVector());
     }
     
     /** Checks whether the entity is a hostile mob.

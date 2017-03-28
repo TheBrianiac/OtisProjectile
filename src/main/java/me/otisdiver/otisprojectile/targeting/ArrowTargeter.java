@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Projectile;
-import org.bukkit.util.Vector;
 
 import me.otisdiver.otisprojectile.OtisProjectile;
 import me.otisdiver.otisprojectile.Utils;
@@ -42,12 +41,12 @@ public class ArrowTargeter extends Targeter {
         }
         
         // Find the nearest entity from that list, save it.
-        Entity e = Utils.getNearestEntityInList(projectileLocation, nearbyEntities);
-        if (e == null) return;
+        Entity target = Utils.getNearestEntityInList(projectileLocation, nearbyEntities);
+        if (target == null) return;
         
         // Adjust velocity.
         projectile.setVelocity(projectile.getVelocity().multiply(0));
-        projectile.setVelocity(e.getLocation().toVector().subtract(projectileLocation.toVector()));
+        projectile.setVelocity(Utils.getLocationsVectorDifference(projectileLocation, target.getLocation()));
     }
     
     @Override
